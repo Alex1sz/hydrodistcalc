@@ -1,0 +1,110 @@
+<div class="scenario-form">
+  <h2>Delivery Scenario</h2>
+  <form [formGroup]="scenarioForm" (ngSubmit)="onSubmit()" *ngIf="!showResults">
+    <label for="fillTime">Trailer Fill Time (days):</label>
+    <input id="fillTime" formControlName="fillTime" type="number">
+
+    <label for="offloadTime">Offload Time (days):</label>
+    <input id="offloadTime" formControlName="offloadTime" type="number">
+
+    <label for="numberOfVehicles">No. of Vehicles:</label>
+    <input id="numberOfVehicles" formControlName="numberOfVehicles" type="number">
+
+    <label for="haulerPrice">Hauler Price ($/mile):</label>
+    <input id="haulerPrice" formControlName="haulerPrice" type="number">
+
+    <label for="trailerModel">Rental Trailer Type:</label>
+    <select id="trailerModel" formControlName="trailerModel">
+      <option *ngFor="let model of trailerModels" [value]="model.name">{{ model.name }}</option>
+    </select>
+
+    <label for="trailerPrice">Rental Trailer Price ($/month):</label>
+    <input id="trailerPrice" formControlName="trailerPrice" type="number">
+
+    <button type="submit">Calculate</button>
+    <button type="button" (click)="onCancel()">Cancel</button>
+  </form>
+
+  <ng-container *ngIf="showResults">
+    <div *ngFor="let scenario of scenarios; let i = index" class="scenario-results">
+      <h2>Scenario {{ i + 1 }} Results</h2>
+      <div class="results-grid">
+        <div class="result-item">
+          <label>Distance (one-way)</label>
+          <span>{{calculatedResult.distance}} mi</span>
+        </div>
+        <div class="result-item">
+          <label>Supplier production rate</label>
+          <span>{{calculatedResult.productionRate}} kg/day</span>
+        </div>
+        <div class="result-item">
+          <label>Supplier pressure capacity</label>
+          <span>{{calculatedResult.pressure}} bar(g)</span>
+        </div>
+        <div class="result-item">
+          <label>Days needed to transport</label>
+          <span>{{calculatedResult.daysToTransport}} days</span>
+        </div>
+        <div class="result-item">
+          <label>Offtaker consumption rate</label>
+          <span>{{calculatedResult.consumptionRate}} kg/week</span>
+        </div>
+        <div class="result-item">
+          <label>Time needed for offload</label>
+          <span>{{calculatedResult.offloadTime}} days</span>
+        </div>
+        <!-- Hauler Section -->
+        <div class="section-header">Hauler</div>
+        <div class="result-item">
+          <label>Price / mi</label>
+          <span>${{calculatedResult.haulerPrice}}</span>
+        </div>
+        <div class="result-item">
+          <label>One-way price</label>
+          <span>${{calculatedResult.onewayPrice}}</span>
+        </div>
+        <div class="result-item">
+          <label>Round-Trip price</label>
+          <span>${{calculatedResult.roundTripPrice}}</span>
+        </div>
+        <!-- Trailer Section -->
+        <div class="section-header">Trailer</div>
+        <div class="result-item">
+          <label>Model</label>
+          <span>{{calculatedResult.trailerModel}}</span>
+        </div>
+        <div class="result-item">
+          <label>Monthly Rate</label>
+          <span>${{calculatedResult.monthlyRate}}/mo</span>
+        </div>
+        <div class="result-item">
+          <label>Design Capacity</label>
+          <span>{{calculatedResult.designCapacity}} kg</span>
+        </div>
+        <div class="result-item">
+          <label>Design Pressure</label>
+          <span>{{calculatedResult.designPressure}} bar(g)</span>
+        </div>
+        <div class="result-item">
+          <label>Design Volume</label>
+          <span>{{calculatedResult.designVolume}} m³</span>
+        </div>
+        <!-- Price Summary -->
+        <div class="section-header">Price Summary</div>
+        <div class="result-item">
+          <label>Trailer price per kg H₂</label>
+          <span>${{calculatedResult.trailerPricePerKg}}</span>
+        </div>
+        <div class="result-item">
+          <label>Hauler price per kg H₂</label>
+          <span>${{calculatedResult.haulerPricePerKg}}</span>
+        </div>
+        <div class="result-item total">
+          <label>Total price per kg H₂</label>
+          <span>${{calculatedResult.totalPricePerKg}}</span>
+        </div>
+      </div>
+      <button type="button" (click)="removeScenario(i)">Remove</button>
+    </div>
+  </ng-container>
+</div>

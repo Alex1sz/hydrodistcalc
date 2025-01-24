@@ -1,0 +1,67 @@
+.distribution-planning-tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  height: 100vh;
+}
+
+.site-selection {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 20px;
+
+  label {
+    margin-right: 10px;
+  }
+
+  select {
+    margin-right: 20px;
+    padding: 10px;
+    font-size: 1em;
+  }
+}
+
+.columns {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 800px;
+  flex-grow: 1;
+  height: calc(100vh - 150px);
+}
+
+.column {
+  flex: 1;
+  margin: 0 10px;
+  padding: 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gray-column {
+  background-color: #f0f0f0;
+}
+
+.blue-column {
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+}
+
+button {
+  background-color: transparent;
+  color: inherit;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}

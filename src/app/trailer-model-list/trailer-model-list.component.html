@@ -1,0 +1,11 @@
+<div class="trailer-model-list">
+  <h2>Destination:</h2>
+  <select>
+    <option *ngFor="let model of trailerModels">{{ model.name }}</option>
+  </select>
+  <div *ngFor="let model of trailerModels">
+    <p>Capacity: {{ model.capacity }} kg</p>
+    <p>Pressure: {{ model.pressure }} bar</p>
+    <p>Volume: {{ model.volume }} m³</p>
+  </div>
+</div>

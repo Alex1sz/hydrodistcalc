@@ -57,3 +57,85 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+# Hydrogen Distribution Price Calculator 
+
+## Goal
+Build a front-end Angular application that calculates the cost of distributing hydrogen between two sites using different trailer models and scenario inputs.
+
+## 1. Scope & Deliverables
+- Create an Angular app that:
+  - Displays a list of Sites and a list of Trailer Models (both from hard-coded JSON data, simulating an API).
+  - Lets the user select:
+    - Supplier Site (origin)
+    - Offtaker Site (destination)
+  - Lets the user add multiple distribution scenarios, each with:
+    - Trailer model (picklist)
+    - Number of vehicles
+    - Time to fill a trailer (days)
+    - Time to offload a trailer (days)
+    - Hauler price ($/mile)
+    - Trailer price ($/month)
+  - Calculates for each scenario:
+    - Trailer price per kg of H₂
+    - Hauler price per kg of H₂
+    - Total price per kg of H₂
+  - Deploy the finished app to a free-tier service (e.g., Netlify, Vercel, GitHub Pages, etc.).
+  - Submit:
+    - A link to the Git repository with source code.
+    - A link to the deployed application.
+
+You have one week to complete this challenge.
+
+## 2. Data Requirements
+
+### Site Resource
+Create 3 Sites with the following fields (names are flexible, but must store this data):
+- Site name
+- Coordinates (latitude, longitude)
+- Production rate (kg/day) – for suppliers
+- Production storage pressure (bar[g]) – for suppliers
+- Consumption rate (kg/week) – for offtakers
+
+### Trailer Model Resource
+Create 3 Trailer Models, each with:
+- Model name
+- Design capacity (kg)
+- Design pressure (bar[g])
+- Design volume (m³)
+
+## 3. Application Inputs
+- **Global (Applies to All Scenarios)**
+  - Supplier Site (pick from Site Resource)
+  - Offtaker Site (pick from Site Resource)
+- **Scenario-Specific (One row/form per scenario)**
+  - Trailer model
+  - Number of vehicles
+  - Time required to fill (days)
+  - Time required to offload (days)
+  - Hauler price ($/mile)
+  - Trailer price ($/month)
+
+## 4. Calculations & Output
+Use logic adapted from the provided Excel reference to derive:
+- Trailer price per kg of H₂
+- Hauler price per kg of H₂
+- Total price per kg of H₂
+
+Intermediate values (e.g., total trips per month, distance, capacity usage, etc.) should be derived in the front end.
+
+## 5. Implementation Guidelines
+- Angular (latest stable version) is required.
+- Use mock services returning hard-coded JSON or TypeScript objects (simulating REST API calls).
+- Keep naming, structure, and additional logic flexible—just ensure all required fields are present.
+- Basic UI styling is sufficient as long as the app is functional and clear.
+
+## 6. Deployment & Submission
+- Deploy on a free tier cloud service (e.g., Netlify, Vercel, GitHub Pages).
+- Submit a Git repo link and a live deployment link within one week.
+
+## Questions or Clarifications
+Reach out if you need any clarifications on the calculations or data usage. Good luck!
+
+UI Design Mock Up
