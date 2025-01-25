@@ -99,6 +99,8 @@ export class ScenarioFormComponent implements OnInit {
 
     // Ensure all trailer details are included in the result
     return {
+      origin: locations.origin,
+      destination: locations.destination,
       distance,
       productionRate,
       daysToTransport,
