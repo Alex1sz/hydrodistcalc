@@ -24,6 +24,7 @@ interface ScenarioResult {
   trailerPricePerKg: number;
   haulerPricePerKg: number;
   totalPricePerKg: number;
+  pressureCapacity: number;
 }
 
 // Add type for trailer models
@@ -98,7 +99,7 @@ export class ScenarioFormComponent implements OnInit {
     const roundTripPrice = this.calculateRoundTripPrice(oneWayPrice);
 
     // Ensure all trailer details are included in the result
-    return {
+    const result = {
       origin: locations.origin,
       destination: locations.destination,
       distance,
@@ -117,7 +118,12 @@ export class ScenarioFormComponent implements OnInit {
       haulerPrice: values.haulerPrice, // Hauler price per mile from the form
       pricePerMile: values.haulerPrice, // Price/mi under Hauler section
       monthlyPrice: values.trailerPrice, // Monthly Price under Trailer section
+      pressureCapacity: trailerDetails.pressureCapacity,
+      offloadTime: values.offloadTime,  // From form values
+      consumptionRate: productionRate * 7, // Converting daily production to weekly consumption
     };
+    console.log('Scenario Result:', result);
+    return result;
   }
 
   calculateDistance(originSite: any, destinationSite: any): number {

@@ -5,24 +5,24 @@
     <button class="close" (click)="close.emit(scenario)">X</button>
   </div>
   <div class="results-grid">
-    <div class="result-item">Distance (one-way): {{ scenario.distance }} km</div>
+    <div class="result-item">Distance (one-way): {{ scenario.distance }} mi</div>
     <div class="result-item">Supplier production rate: {{ scenario.productionRate }} kg/day</div>
     <div class="result-item">Supplier pressure capacity: {{ scenario.pressureCapacity }} bar</div>
     <div class="result-item">Days needed to transport: {{ scenario.daysToTransport }} days</div>
     <div class="result-item">Offtaker consumption rate: {{ scenario.consumptionRate }} kg/week</div>
     <div class="result-item">Time needed for offload: {{ scenario.offloadTime }} days</div>
     <div class="section-header">Hauler</div>
-    <div class="result-item">Price / mi: ${{ scenario.haulerPrice }}</div>
-    <div class="result-item">One-Way price: ${{ scenario.oneWayPrice }}</div>
-    <div class="result-item">Round-Trip price: ${{ scenario.roundTripPrice }}</div>
+    <div class="result-item">Price / mi: ${{ scenario.haulerPrice | number:'1.2-2' }}</div>
+    <div class="result-item">One-Way price: ${{ scenario.oneWayPrice | number:'1.2-2' }}</div>
+    <div class="result-item">Round-Trip price: ${{ scenario.roundTripPrice | number:'1.2-2' }}</div>
     <div class="section-header">Trailer</div>
     <div class="result-item">Model: {{ scenario.trailerModel }}</div>
-    <div class="result-item">Monthly Price: ${{ scenario.monthlyPrice }}</div>
+    <div class="result-item">Monthly Price: ${{ scenario.monthlyPrice | number:'1.2-2' }}</div>
     <div class="result-item">Design Capacity: {{ scenario.designCapacity }} kg</div>
     <div class="result-item">Design Pressure: {{ scenario.designPressure }} bar</div>
     <div class="result-item">Design Volume: {{ scenario.designVolume }} m³</div>
-    <div class="result-item">Trailer price per kg H2: ${{ scenario.trailerPricePerKg }}</div>
-    <div class="result-item">Hauler price per kg H2: ${{ scenario.haulerPricePerKg }}</div>
-    <div class="result-item">Total price per kg H2: ${{ scenario.totalPricePerKg }}</div>
+    <div class="result-item">Trailer price per kg H2: ${{ scenario.trailerPricePerKg | number:'1.2-2' }}</div>
+    <div class="result-item">Hauler price per kg H2: ${{ scenario.haulerPricePerKg | number:'1.2-2' }}</div>
+    <div class="result-item">Total price per kg H2: ${{ scenario.totalPricePerKg | number:'1.2-2' }}</div>
   </div>
 </div>
