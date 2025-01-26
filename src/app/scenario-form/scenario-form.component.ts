@@ -113,7 +113,10 @@ export class ScenarioFormComponent implements OnInit {
       designVolume: trailerDetails.volume,
       trailerPricePerKg: this.calculateTrailerPricePerKg(trailerDetails.price, trailerDetails.capacity),
       haulerPricePerKg: this.calculateHaulerPricePerKg(values.haulerPrice, trailerDetails.capacity),
-      totalPricePerKg: this.calculateTotalPricePerKg(trailerDetails.price, values.haulerPrice, trailerDetails.capacity)
+      totalPricePerKg: this.calculateTotalPricePerKg(trailerDetails.price, values.haulerPrice, trailerDetails.capacity),
+      haulerPrice: values.haulerPrice, // Hauler price per mile from the form
+      pricePerMile: values.haulerPrice, // Price/mi under Hauler section
+      monthlyPrice: values.trailerPrice, // Monthly Price under Trailer section
     };
   }
 
