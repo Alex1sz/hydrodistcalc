@@ -10,16 +10,7 @@ import { ScenarioService } from './scenario.service';
 import { SiteService } from './site.service';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-
-interface ScenarioResult {
-  distance: number;
-  productionRate: number;
-  haulerCost: number;
-  price: number;
-  capacity: number;
-  pressure: number;
-  volume: number;
-}
+import { ScenarioResult } from './models/scenario-result.interface';
 
 @Component({
   selector: 'app-root',
