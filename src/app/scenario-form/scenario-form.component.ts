@@ -180,4 +180,8 @@ export class ScenarioFormComponent implements OnInit {
   calculateTotalPricePerKg(trailerPrice: number, haulerPrice: number, capacity: number): number {
     return (trailerPrice + haulerPrice) / capacity;
   }
+
+  addScenario(scenario: ScenarioResult) {
+    this.scenarios.unshift(scenario); // Use unshift instead of push to add to beginning
+  }
 }

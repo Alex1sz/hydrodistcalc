@@ -2,22 +2,53 @@
   <h1>Distribution Planning Tool</h1>
   <div class="site-selection">
     <form [formGroup]="siteSelectionForm">
-      <label for="origin">Origin Site:</label>
-      <select formControlName="origin">
-        <option *ngFor="let site of sites" [value]="site.name">{{ site.name }}</option>
-      </select>
-
-      <label for="destination">Destination Site:</label>
-      <select formControlName="destination">
-        <option *ngFor="let site of sites" [value]="site.name">{{ site.name }}</option>
-      </select>
+      <div class="form-group">
+        <label for="origin">Origin Site:</label>
+        <select id="origin" formControlName="origin">
+          <option value="">Select Origin</option>
+          <option *ngFor="let site of sites" [value]="site.name">{{ site.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="destination">Destination Site:</label>
+        <select id="destination" formControlName="destination">
+          <option value="">Select Destination</option>
+          <option *ngFor="let site of sites" [value]="site.name">{{ site.name }}</option>
+        </select>
+      </div>
     </form>
   </div>
+  <div class="scenario-selector" *ngIf="scenarios$ | async as scenarios">
+    <div *ngIf="scenarios.length >= 3">
+      <select (change)="selectScenario(+($any($event.target).value), 0)">
+        <option *ngFor="let index of getAvailableScenarios(0, scenarios)" [value]="index"
+          [selected]="selectedScenarios[0] === index">
+          {{ scenarios[index].origin || 'No Origin' }} → {{ scenarios[index].destination || 'No Dest' }}
+        </option>
+      </select>
+      <select (change)="selectScenario(+($any($event.target).value), 1)">
+        <option *ngFor="let index of getAvailableScenarios(1, scenarios)" [value]="index"
+          [selected]="selectedScenarios[1] === index">
+          {{ scenarios[index].origin || 'No Origin' }} → {{ scenarios[index].destination || 'No Dest' }}
+        </option>
+      </select>
+    </div>
+  </div>
   <div class="columns">
-    <div class="column gray-column"></div>
-    <div class="column gray-column"></div>
+    <div class="column" *ngIf="(scenarios$ | async) as scenarios">
+      <app-scenario-results *ngIf="scenarios[selectedScenarios[0]]" [scenario]="scenarios[selectedScenarios[0]]"
+        (close)="removeScenario(scenarios[selectedScenarios[0]])">
+      </app-scenario-results>
+    </div>
+
+    <div class="column" *ngIf="(scenarios$ | async) as scenarios">
+      <app-scenario-results *ngIf="scenarios[selectedScenarios[1]]" [scenario]="scenarios[selectedScenarios[1]]"
+        (close)="removeScenario(scenarios[selectedScenarios[1]])">
+      </app-scenario-results>
+    </div>
+
     <div class="column blue-column">
-      <button (click)="addScenario()">+ Add Scenario</button>
+      <button (click)="addScenario()">Add Scenario</button>
     </div>
   </div>
 </div>
@@ -27,8 +58,4 @@
 <div class="app-container">
   <app-site-list></app-site-list>
   <app-scenario-form *ngIf="formVisible$ | async"></app-scenario-form>
-  <div class="scenarios" *ngIf="scenarios$ | async as scenarios">
-    <app-scenario-results *ngFor="let scenario of scenarios" [scenario]="scenario" (close)="removeScenario(scenario)">
-    </app-scenario-results>
-  </div>
 </div>

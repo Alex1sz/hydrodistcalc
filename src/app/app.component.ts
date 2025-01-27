@@ -28,6 +28,7 @@ import { ScenarioResult } from './models/scenario-result.interface';
 })
 export class AppComponent implements OnInit {
   scenarios$: Observable<ScenarioResult[]>;
+  selectedScenarios: number[] = [0, 1]; // Indexes of scenarios to display
   formVisible$: Observable<boolean>;
   siteSelectionForm: FormGroup;
   sites: any[] = [];
@@ -62,5 +63,17 @@ export class AppComponent implements OnInit {
 
   removeScenario(scenario: ScenarioResult) {
     this.scenarioService.removeScenario(scenario);
+  }
+
+  // Method to handle scenario selection
+  selectScenario(index: number, column: 0 | 1) {
+    this.selectedScenarios[column] = index;
+  }
+
+  // Helper method to get available scenarios (those not selected in other column)
+  getAvailableScenarios(currentColumn: 0 | 1, scenarios: ScenarioResult[]): number[] {
+    return scenarios.map((_, index) => index)
+      .filter(index => !this.selectedScenarios.includes(index) ||
+        this.selectedScenarios[currentColumn] === index);
   }
 }

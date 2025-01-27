@@ -1,56 +1,106 @@
 .distribution-planning-tool {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   padding: 20px;
-  height: 100vh;
+  margin: 0 auto;
+  max-width: 1400px;
+  background-color: #f5f5f5;
+
+  h1 {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 24px;
+  }
 }
 
 .site-selection {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 800px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+
+  form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
 
   label {
-    margin-right: 10px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: block;
   }
 
   select {
-    margin-right: 20px;
-    padding: 10px;
-    font-size: 1em;
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+  }
+}
+
+.scenario-selector {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+
+  select {
+    padding: 8px 12px;
+    min-width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
   }
 }
 
 .columns {
   display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 800px;
-  flex-grow: 1;
-  height: calc(100vh - 150px);
+  gap: 20px;
+  flex: 1;
+  min-height: calc(100vh - 250px);
 }
 
 .column {
   flex: 1;
-  margin: 0 10px;
+  background: white;
+  border-radius: 8px;
   padding: 20px;
-  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.gray-column {
-  background-color: #f0f0f0;
+  flex-direction: column;
 }
 
 .blue-column {
   background-color: #007bff;
-  color: white;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  button {
+    padding: 16px 32px;
+    font-size: 18px;
+    color: white;
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+.gray-column {
+  background-color: #f0f0f0;
 }
 
 button {
@@ -64,4 +114,52 @@ button {
 
 button:hover {
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+// Scenario results styling
+:host ::ng-deep app-scenario-results {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  .scenario-results {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f5f5f5;
+    border-radius: 4px;
+    padding: 20px;
+    overflow: auto;
+
+    .result-item {
+      margin-bottom: 10px;
+      padding: 8px;
+      background: #ffffff;
+      border-radius: 4px;
+    }
+
+    .section-header {
+      font-weight: 500;
+      margin: 15px 0 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+  }
+}
+
+// Media queries for responsive design
+@media (max-width: 1200px) {
+  .columns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .columns {
+    grid-template-columns: 1fr;
+  }
+
+  .site-selection form {
+    grid-template-columns: 1fr;
+  }
 }
