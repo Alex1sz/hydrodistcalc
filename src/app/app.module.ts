@@ -17,7 +17,6 @@ import { ScenarioResultsComponent } from './scenario-results/scenario-results.co
     ScenarioFormComponent,
     ScenarioResultsComponent
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: []
 })
 export class AppModule { } 
