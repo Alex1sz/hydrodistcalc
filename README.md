@@ -59,6 +59,19 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
 
 
+# Deployment instructions
+
+The app is deployed to [Hydrogen Distribution Price Calculator](https://hydrodist.web.app/).
+
+Its runs on free tier firebase hosting.
+
+To deploy:
+
+```bash
+ng build --prod
+firebase deploy
+```
+
 # Hydrogen Distribution Price Calculator 
 
 ## Goal
@@ -125,17 +138,3 @@ Use logic adapted from the provided Excel reference to derive:
 
 Intermediate values (e.g., total trips per month, distance, capacity usage, etc.) should be derived in the front end.
 
-## 5. Implementation Guidelines
-- Angular (latest stable version) is required.
-- Use mock services returning hard-coded JSON or TypeScript objects (simulating REST API calls).
-- Keep naming, structure, and additional logic flexible—just ensure all required fields are present.
-- Basic UI styling is sufficient as long as the app is functional and clear.
-
-## 6. Deployment & Submission
-- Deploy on a free tier cloud service (e.g., Netlify, Vercel, GitHub Pages).
-- Submit a Git repo link and a live deployment link within one week.
-
-## Questions or Clarifications
-Reach out if you need any clarifications on the calculations or data usage. Good luck!
-
-UI Design Mock Up
