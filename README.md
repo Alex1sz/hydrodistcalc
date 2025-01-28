@@ -94,12 +94,6 @@ Build a front-end Angular application that calculates the cost of distributing h
     - Trailer price per kg of H₂
     - Hauler price per kg of H₂
     - Total price per kg of H₂
-  - Deploy the finished app to a free-tier service (e.g., Netlify, Vercel, GitHub Pages, etc.).
-  - Submit:
-    - A link to the Git repository with source code.
-    - A link to the deployed application.
-
-You have one week to complete this challenge.
 
 ## 2. Data Requirements
 
