@@ -5,46 +5,15 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TrailerModelService } from '../trailer-model.service';
 import { ScenarioService } from '../scenario.service';
 import { SiteService } from '../site.service';
-
-interface ScenarioResult {
-  distance: number;
-  productionRate: number;
-  pressure: number;
-  daysToTransport: number;
-  offloadTime: number;
-  consumptionRate: number;
-  haulerPrice: number;
-  onewayPrice: number;
-  roundTripPrice: number;
-  trailerModel: string;
-  monthlyRate: number;
-  designCapacity: number;
-  designPressure: number;
-  designVolume: number;
-  trailerPricePerKg: number;
-  haulerPricePerKg: number;
-  totalPricePerKg: number;
-  pressureCapacity: number;
-}
-
-// Add type for trailer models
-type TrailerModel = 'GTL 1500' | 'GTL Tandem';
-
-// Add type for trailer specs
-interface TrailerSpecs {
-  price: number;
-  capacity: number;
-  pressure: number;
-  volume: number;
-  pressureCapacity?: number;
-}
+import { ScenarioResultsComponent } from '../scenario-results/scenario-results.component';
+import { ScenarioResult } from '../models/scenario-result.interface';
 
 @Component({
   selector: 'app-scenario-form',
   standalone: true,
   templateUrl: './scenario-form.component.html',
   styleUrls: ['./scenario-form.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule, ScenarioResultsComponent]
 })
 export class ScenarioFormComponent implements OnInit {
   scenarioForm: FormGroup;
@@ -66,9 +35,9 @@ export class ScenarioFormComponent implements OnInit {
       fillTime: [2.0],
       offloadTime: [2.5],
       numberOfVehicles: [1],
-      haulerPrice: [5.00],
+      haulerPrice: [5.00], // hauler price per mile
       trailerModel: ['GTL 1500'],
-      trailerPrice: [5.00]
+      trailerPrice: [5.00] // this is the price per month
     });
   }
 
@@ -91,39 +60,82 @@ export class ScenarioFormComponent implements OnInit {
     const destinationSite = this.sites.find(site => site.name === locations.destination);
 
     const distance = this.calculateDistance(originSite, destinationSite);
-    const productionRate = this.calculateProductionRate(originSite);
     const trailerDetails = this.trailerModelService.getTrailerDetails(values.trailerModel);
+    const trailerDesignVolume = this.calculateTrailerDesignVolumeFromDetails(trailerDetails);
+    // this is a constant according to the spreadsheet
+    const daysToTransport = 0.25;
 
-    const daysToTransport = this.calculateDaysToTransport(productionRate, trailerDetails.capacity);
-    const oneWayPrice = this.calculateOneWayPrice(distance, values.haulerPrice);
+    const supplierSingleTrailerCapacity = this.calculateSupplierSingleTrailerCapacity(originSite.supplierProductionStoragePressureCapacity,
+      trailerDesignVolume);
+
+    const timeNeededForSupplierToFill = this.calculateTimeNeededForSupplierToFill(supplierSingleTrailerCapacity,
+      originSite.supplierProductionRate);
+
+    const daysNeededToTransportH2ToOffTaker = 0.25;
+    const daysNeededForOfftakerToOffloadHydrogen = this.calculateDaysNeededForOfftakerToOffloadyHydrogen(supplierSingleTrailerCapacity, destinationSite.offTakerConsumptionRate);
+
+    const amountOfH2SupplierCanFillInAMonth = this.calculateAmountOfH2SupplierCanFillInAMonth(timeNeededForSupplierToFill,
+      daysNeededToTransportH2ToOffTaker,
+      supplierSingleTrailerCapacity,
+      daysNeededForOfftakerToOffloadHydrogen);
+
+    const numberOfTripsPerMonth = this.calculateNumberOfTripsPerMonth(
+      timeNeededForSupplierToFill,
+      daysNeededToTransportH2ToOffTaker,
+      daysNeededForOfftakerToOffloadHydrogen);
+
+    const trailerPricePerKg = this.calculateTrailerPricePerKg(trailerDetails.pricePerMonth,
+      amountOfH2SupplierCanFillInAMonth);
+
+
+    const oneWayPrice = this.calculateOneWayPrice(distance, values.trailerPrice);
     const roundTripPrice = this.calculateRoundTripPrice(oneWayPrice);
+
+    const haulerPricePerKgOfH2 = this.calculateHaulerPricePerKg(
+      timeNeededForSupplierToFill,
+      daysNeededToTransportH2ToOffTaker,
+      daysNeededForOfftakerToOffloadHydrogen,
+      roundTripPrice,
+      amountOfH2SupplierCanFillInAMonth);
+
+
+    const totalPricePerKgOfH2 = this.calculateTotalPricePerKg(trailerPricePerKg, haulerPricePerKgOfH2);
 
     // Ensure all trailer details are included in the result
     const result = {
       origin: locations.origin,
       destination: locations.destination,
       distance,
-      productionRate,
-      daysToTransport,
-      oneWayPrice,
-      roundTripPrice,
-      trailerModel: values.trailerModel,
-      monthlyRate: trailerDetails.price, // Assuming monthlyRate is the price from trailerDetails
-      designCapacity: trailerDetails.capacity,
-      designPressure: trailerDetails.pressureCapacity,
-      designVolume: trailerDetails.volume,
-      trailerPricePerKg: this.calculateTrailerPricePerKg(trailerDetails.price, trailerDetails.capacity),
-      haulerPricePerKg: this.calculateHaulerPricePerKg(values.haulerPrice, trailerDetails.capacity),
-      totalPricePerKg: this.calculateTotalPricePerKg(trailerDetails.price, values.haulerPrice, trailerDetails.capacity),
-      haulerPrice: values.haulerPrice, // Hauler price per mile from the form
-      pricePerMile: values.haulerPrice, // Price/mi under Hauler section
-      monthlyPrice: values.trailerPrice, // Monthly Price under Trailer section
-      pressureCapacity: trailerDetails.pressureCapacity,
-      offloadTime: values.offloadTime,  // From form values
-      consumptionRate: productionRate * 7, // Converting daily production to weekly consumption
+      supplierProductionRate: originSite.supplierProductionRate,
+      supplierProductionStoragePressureCapacity: originSite.supplierProductionStoragePressureCapacity,
+      offTakerConsumptionRate: destinationSite.offTakerConsumptionRate,
+      daysToTransport: daysToTransport, // site constant of 0.25
+      offloadTime: values.offloadTime, // From form values
+      haulerPricePerMile: values.haulerPrice, // Hauler price per mile from the form... Price/mi under Hauler section
+      oneWayPrice: oneWayPrice,
+      roundTripPrice: roundTripPrice,
+      trailerModel: values.trailerModel, // selected from form
+      trailerMonthlyRate: trailerDetails.pricePerMonth, // Assuming monthlyRate is the price from trailerDetails
+      trailerDesignCapacity: trailerDetails.designCapacity,
+      trailerDesignPressure: trailerDetails.designPressure,
+      trailerDesignVolume: trailerDesignVolume,
+      trailerPricePerKg: trailerPricePerKg,
+      haulerPricePerKg: haulerPricePerKgOfH2,
+      totalPricePerKg: totalPricePerKgOfH2,
     };
     console.log('Scenario Result:', result);
     return result;
+  }
+
+  calculateAmountOfH2SupplierCanFillInAMonth(timeNeededForSupplierToFill: number,
+    daysNeededToTransportH2ToOffTaker: number,
+    supplerSingleTrailerCapacity: number,
+    daysNeededToOffloadHydrogen: number): number {
+    return 30 / (timeNeededForSupplierToFill + (daysNeededToTransportH2ToOffTaker * 2) + daysNeededToOffloadHydrogen) * supplerSingleTrailerCapacity;
+  }
+
+  calculateDaysNeededForOfftakerToOffloadyHydrogen(amountOfH2SupplierAbleToFillinASingleTrailer: number, offtakerConsumptionRate: number): number {
+    return amountOfH2SupplierAbleToFillinASingleTrailer / (offtakerConsumptionRate / 5);
   }
 
   calculateDistance(originSite: any, destinationSite: any): number {
@@ -132,9 +144,46 @@ export class ScenarioFormComponent implements OnInit {
     return 100; // Placeholder value
   }
 
+  calculateTrailerDesignVolumeFromDetails(trailerDetails: any): number {
+    return trailerDetails.designCapacity / 2 * 8.314 * 273.15 / (trailerDetails.designPressure + 1);
+  }
+
+  // this is kg/trailer
+  calculateSupplierSingleTrailerCapacity(supplierPressureCapacity: number, trailerDesignVolume: number): number {
+    return (supplierPressureCapacity + 1) * trailerDesignVolume / 8.314 / 273.15 * 2;
+  }
+
+  calculateTimeNeededForSupplierToFill(supplierSingleTrailerCapacity: number,
+    supplierProductionRate: number): number {
+    return supplierSingleTrailerCapacity / supplierProductionRate;
+  }
+
+  calculateNumberOfTripsPerMonth(timeNeededForSupplierToFill: number,
+    daysNeededToTransportH2ToOffTaker: number,
+    daysNeededToOffloadHydrogen: number): number {
+
+    return 30 / (timeNeededForSupplierToFill + (daysNeededToTransportH2ToOffTaker * 2) + daysNeededToOffloadHydrogen);
+  }
+
+  calculateTrailerPricePerKg(trailerPricePerMonth: number, amountOfH2SupplierCanFillInAMonth: number): number {
+    return trailerPricePerMonth / amountOfH2SupplierCanFillInAMonth;
+  }
+
+  calculateHaulerPricePerKg(timeNeededForSupplierToFill: number,
+    daysNeededToTransportH2ToOffTaker: number,
+    daysNeededToOffloadHydrogen: number,
+    roundTripPrice: number,
+    amountOfH2SupplierCanFillInAMonth: number): number {
+    return (30 / (timeNeededForSupplierToFill + (daysNeededToTransportH2ToOffTaker * 2) + daysNeededToOffloadHydrogen) * roundTripPrice) / amountOfH2SupplierCanFillInAMonth;
+  }
+
+  calculateTotalPricePerKg(trailerPricePerKg: number, haulerPricePerKg: number): number {
+    return trailerPricePerKg + haulerPricePerKg;
+  }
+
   calculateProductionRate(originSite: any): number {
-    if (!originSite || !originSite.productionRate) return 0;
-    return originSite.productionRate;
+    if (!originSite || !originSite.supplierProductionRate) return 0;
+    return originSite.supplierProductionRate; // Assuming supplierProductionRate is the production rate
   }
 
   calculateDaysToTransport(productionRate: number, capacity: number): number {
@@ -142,9 +191,9 @@ export class ScenarioFormComponent implements OnInit {
     return Math.ceil(productionRate / capacity);
   }
 
-  calculateOneWayPrice(distance: number, haulerPrice: number): number {
+  calculateOneWayPrice(gtlPricePerMile: number, distance: number): number {
     // Calculate cost for a one-way trip
-    return distance * haulerPrice + 500;
+    return gtlPricePerMile * distance;
   }
 
   calculateRoundTripPrice(oneWayPrice: number): number {
@@ -168,19 +217,6 @@ export class ScenarioFormComponent implements OnInit {
 
   removeScenario(index: number) {
     this.scenarios.splice(index, 1);
-  }
-
-  // Add methods to calculate price per kg
-  calculateTrailerPricePerKg(price: number, capacity: number): number {
-    return price / capacity;
-  }
-
-  calculateHaulerPricePerKg(haulerPrice: number, capacity: number): number {
-    return haulerPrice / capacity;
-  }
-
-  calculateTotalPricePerKg(trailerPrice: number, haulerPrice: number, capacity: number): number {
-    return (trailerPrice + haulerPrice) / capacity;
   }
 
   addScenario(scenario: ScenarioResult) {

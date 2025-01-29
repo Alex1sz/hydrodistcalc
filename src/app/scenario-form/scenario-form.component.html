@@ -26,85 +26,8 @@
   </form>
 
   <ng-container *ngIf="showResults">
-    <div *ngFor="let scenario of scenarios; let i = index" class="scenario-results">
-      <h2>Scenario {{ i + 1 }} Results</h2>
-      <div class="results-grid">
-        <div class="result-item">
-          <label>Distance (one-way)</label>
-          <span>{{calculatedResult.distance}} mi</span>
-        </div>
-        <div class="result-item">
-          <label>Supplier production rate</label>
-          <span>{{calculatedResult.productionRate}} kg/day</span>
-        </div>
-        <div class="result-item">
-          <label>Supplier pressure capacity</label>
-          <span>{{calculatedResult.pressure}} bar(g)</span>
-        </div>
-        <div class="result-item">
-          <label>Days needed to transport</label>
-          <span>{{calculatedResult.daysToTransport}} days</span>
-        </div>
-        <div class="result-item">
-          <label>Offtaker consumption rate</label>
-          <span>{{calculatedResult.consumptionRate}} kg/week</span>
-        </div>
-        <div class="result-item">
-          <label>Time needed for offload</label>
-          <span>{{calculatedResult.offloadTime}} days</span>
-        </div>
-        <!-- Hauler Section -->
-        <div class="section-header">Hauler</div>
-        <div class="result-item">
-          <label>Price / mi</label>
-          <span>${{calculatedResult.haulerPrice}}</span>
-        </div>
-        <div class="result-item">
-          <label>One-way price</label>
-          <span>${{calculatedResult.onewayPrice}}</span>
-        </div>
-        <div class="result-item">
-          <label>Round-Trip price</label>
-          <span>${{calculatedResult.roundTripPrice}}</span>
-        </div>
-        <!-- Trailer Section -->
-        <div class="section-header">Trailer</div>
-        <div class="result-item">
-          <label>Model</label>
-          <span>{{calculatedResult.trailerModel}}</span>
-        </div>
-        <div class="result-item">
-          <label>Monthly Rate</label>
-          <span>${{calculatedResult.monthlyRate}}/mo</span>
-        </div>
-        <div class="result-item">
-          <label>Design Capacity</label>
-          <span>{{calculatedResult.designCapacity}} kg</span>
-        </div>
-        <div class="result-item">
-          <label>Design Pressure</label>
-          <span>{{calculatedResult.designPressure}} bar(g)</span>
-        </div>
-        <div class="result-item">
-          <label>Design Volume</label>
-          <span>{{calculatedResult.designVolume}} m³</span>
-        </div>
-        <!-- Price Summary -->
-        <div class="section-header">Price Summary</div>
-        <div class="result-item">
-          <label>Trailer price per kg H₂</label>
-          <span>${{calculatedResult.trailerPricePerKg}}</span>
-        </div>
-        <div class="result-item">
-          <label>Hauler price per kg H₂</label>
-          <span>${{calculatedResult.haulerPricePerKg}}</span>
-        </div>
-        <div class="result-item total">
-          <label>Total price per kg H₂</label>
-          <span>${{calculatedResult.totalPricePerKg}}</span>
-        </div>
-      </div>
-      <button type="button" (click)="removeScenario(i)">Remove</button>
+    <div *ngFor="let scenario of scenarios; let i = index">
+      <app-scenario-results [scenario]="scenario" (close)="removeScenario(i)"></app-scenario-results>
     </div>
   </ng-container>
 </div>

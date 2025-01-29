@@ -2,23 +2,20 @@ export interface ScenarioResult {
   origin: string;
   destination: string;
   distance: number;
-  productionRate: number;
-  pressureCapacity: number;
+  supplierProductionRate: number;
+  supplierProductionStoragePressureCapacity: number;
+  offTakerConsumptionRate: number;
   daysToTransport: number;
-  consumptionRate: number;
   offloadTime: number;
-  haulerPrice: number;
   oneWayPrice: number;
   roundTripPrice: number;
   trailerModel: string;
-  monthlyPrice: number;
-  designCapacity: number;
-  designPressure: number;
-  designVolume: number;
+  trailerMonthlyRate: number;
+  trailerDesignCapacity: number;
+  trailerDesignPressure: number;
+  trailerDesignVolume: number;
   trailerPricePerKg: number;
   haulerPricePerKg: number;
   totalPricePerKg: number;
-  pricePerMile?: number;
-  monthlyRate?: number;
-  pressure?: number;
+  haulerPricePerMile?: number; // Price/mi under Hauler section form input
 } 
