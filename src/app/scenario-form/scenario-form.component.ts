@@ -13,7 +13,7 @@ import { ScenarioResult } from '../models/scenario-result.interface';
   standalone: true,
   templateUrl: './scenario-form.component.html',
   styleUrls: ['./scenario-form.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule, ScenarioResultsComponent]
 })
 export class ScenarioFormComponent implements OnInit {
   scenarioForm: FormGroup;
