@@ -162,6 +162,8 @@ export class ScenarioFormComponent implements OnInit {
       trailerModel: 'GTL 1500',
       trailerPrice: 5.00
     });
+
+    this.dialogRef.close();
   }
 
   removeScenario(index: number) {
