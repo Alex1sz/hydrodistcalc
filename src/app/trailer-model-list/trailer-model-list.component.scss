@@ -1,13 +1,53 @@
 .trailer-model-list {
-  margin: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 24px;
 
   h2 {
-    font-size: 1.5em;
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin-bottom: 24px;
   }
 
-  select {
-    width: 100%;
-    padding: 10px;
-    font-size: 1em;
+  .models-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .model-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      color: #2c3e50;
+      margin-bottom: 12px;
+    }
+
+    .details {
+      font-size: 0.95rem;
+      color: #4b5563;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .trailer-model-list {
+    padding: 16px;
+    margin: 16px;
+
+    .models-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
   }
 }
