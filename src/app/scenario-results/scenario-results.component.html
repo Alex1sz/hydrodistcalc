@@ -1,16 +1,36 @@
 <div class="scenario-results">
   <div class="scenario-card">
     <div class="header">
-      <span>Origin: {{ scenario.origin }}</span>
-      <span>Destination: {{ scenario.destination }}</span>
-      <button class="close" (click)="close.emit(scenario)">X</button>
+      <span>{{ scenario.origin }} → {{ scenario.destination }}</span>
+      <div class="header-buttons">
+        <button class="toggle-charts" (click)="toggleCharts()">
+          {{ showCharts ? 'Hide Charts' : 'Show Charts' }}
+        </button>
+        <button class="close" (click)="close.emit(scenario)">×</button>
+      </div>
     </div>
+
+    <!-- Simple ngIf toggle -->
+    <div *ngIf="showCharts">
+      <app-price-breakdown-chart [breakdown]="{
+        trailerPricePerKg: scenario.trailerPricePerKg,
+        haulerPricePerKg: scenario.haulerPricePerKg,
+        trailerMonthlyRate: scenario.trailerMonthlyRate,
+        amountOfH2SupplierCanFillInAMonth: scenario.amountOfH2SupplierCanFillInAMonth,
+        timeNeededForSupplierToFill: scenario.timeNeededForSupplierToFill,
+        daysNeededToTransportH2ToOffTaker: scenario.daysToTransport,
+        daysNeededForOfftakerToOffloadHydrogen: scenario.offloadTime,
+        roundTripPrice: scenario.roundTripPrice
+      }">
+      </app-price-breakdown-chart>
+    </div>
+
+    <!-- Results grid below -->
     <div class="results-grid">
       <div class="result-item">Distance (one-way): {{ scenario.distance }} mi</div>
       <div class="result-item">Supplier production rate: {{ scenario.supplierProductionRate }} kg/day</div>
       <div class="result-item">Supplier pressure capacity: {{ scenario.supplierProductionStoragePressureCapacity }}
-        bar(g)
-      </div>
+        bar(g)</div>
       <div class="result-item">Days needed to transport: {{ scenario.daysToTransport }} days</div>
       <div class="result-item">Offtaker consumption rate: {{ scenario.offTakerConsumptionRate }} kg/week</div>
       <div class="result-item">Time needed for offload: {{ scenario.offloadTime }} days</div>

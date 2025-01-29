@@ -7,6 +7,7 @@ export interface ScenarioResult {
   offTakerConsumptionRate: number;
   daysToTransport: number;
   offloadTime: number;
+  haulerPricePerMile: number;
   oneWayPrice: number;
   roundTripPrice: number;
   trailerModel: string;
@@ -17,5 +18,7 @@ export interface ScenarioResult {
   trailerPricePerKg: number;
   haulerPricePerKg: number;
   totalPricePerKg: number;
-  haulerPricePerMile?: number; // Price/mi under Hauler section form input
+  // Additional properties needed for charts
+  timeNeededForSupplierToFill: number;
+  amountOfH2SupplierCanFillInAMonth: number;
 } 

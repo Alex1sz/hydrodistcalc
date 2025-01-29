@@ -122,6 +122,8 @@ export class ScenarioFormComponent implements OnInit {
       trailerPricePerKg: trailerPricePerKg,
       haulerPricePerKg: haulerPricePerKgOfH2,
       totalPricePerKg: totalPricePerKgOfH2,
+      timeNeededForSupplierToFill: timeNeededForSupplierToFill,
+      amountOfH2SupplierCanFillInAMonth: amountOfH2SupplierCanFillInAMonth,
     };
     console.log('Scenario Result:', result);
     return result;
