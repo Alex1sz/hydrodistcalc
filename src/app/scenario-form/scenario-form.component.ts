@@ -88,7 +88,7 @@ export class ScenarioFormComponent implements OnInit {
       amountOfH2SupplierCanFillInAMonth);
 
 
-    const oneWayPrice = this.calculateOneWayPrice(distance, values.trailerPrice);
+    const oneWayPrice = this.calculateOneWayPrice(distance, values.haulerPrice);
     const roundTripPrice = this.calculateRoundTripPrice(oneWayPrice);
 
     const haulerPricePerKgOfH2 = this.calculateHaulerPricePerKg(
@@ -193,9 +193,9 @@ export class ScenarioFormComponent implements OnInit {
     return Math.ceil(productionRate / capacity);
   }
 
-  calculateOneWayPrice(gtlPricePerMile: number, distance: number): number {
+  calculateOneWayPrice(distance: number, haulerPricePerMile: number): number {
     // Calculate cost for a one-way trip
-    return gtlPricePerMile * distance;
+    return haulerPricePerMile * distance;
   }
 
   calculateRoundTripPrice(oneWayPrice: number): number {
